@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculate Total Working Time</title>
+    <style>
+      /* styles.css */
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+      }
+
+      label {
+        display: block;
+        margin: 10px 0 5px;
+      }
+
+      select {
+        width: 30%;
+        padding: 8px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      input {
+        width: 90%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      label{
+        margin-bottom: 10px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #result {
+        margin-top: 20px;
+      }
+
+      #total-hours {
+        font-size: larger;
+        color: green;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Calculate Total Working Time</h1>
+      <label for="effective-hours">Effective Hours Worked Per Day:</label>
+      <b>Hours</b><select id="hours"></select>
+      <b>Minutes</b><select id="minutes"></select>
+
+      <label for="last-login">Last Login Time:</label>
+      <input type="time" id="last-login" />
+
+      <button onclick="calculateTotalTime()">Calculate Total Time</button>
+
+      <div id="result">
+        <p>Total Effective Hours Worked: <span id="total-hours">00 hours, 00 minutes</span></p>
+      </div>
+    </div>
+
+    <script>
+      // script.js
+      document.addEventListener("DOMContentLoaded", () => {
+        const hoursdropdown = document.getElementById("hours");
+
+        // Create options from 1 to 12
+        for (let i = 0; i <= 12; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          hoursdropdown.appendChild(option);
+        }
+
+        const minutesdropdown = document.getElementById("minutes");
+
+        // Create options from 1 to 12
+        for (let i = 0; i <= 59; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          minutesdropdown.appendChild(option);
+        }
+      });
+
+      function secondsToTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${hours} hours, ${minutes} minutes`;
+      }
+
+      function calculateTotalTime() {
+        const hoursDropdown = document.getElementById("hours");
+        const minutesDropdown = document.getElementById("minutes");
+        const lastLoginInput = document.getElementById("last-login").value;
+
+        const effectiveHours = parseInt(hoursDropdown.value, 10);
+        const effectiveMinutes = parseInt(minutesDropdown.value, 10);
+
+        if (!lastLoginInput) {
+          alert("Please enter the last login time.");
+          return;
+        }
+
+        const lastLoginTime = new Date();
+        const [hours, minutes] = lastLoginInput.split(":").map(Number);
+        lastLoginTime.setHours(hours);
+        lastLoginTime.setMinutes(minutes);
+        lastLoginTime.setSeconds(0);
+
+        const currentTime = new Date();
+
+        if (lastLoginTime > currentTime) {
+          alert("Last login time cannot be in the future.");
+          return;
+        }
+
+        const timeDifference = currentTime - lastLoginTime; // in milliseconds
+        const secondsWorked = Math.floor(timeDifference / 1000); // convert to seconds
+
+        // const result = secondsToTime(secondsWorked);
+        // alert(result);
+
+        const effectiveSecondsPerDay =
+          effectiveHours * 3600 + effectiveMinutes * 60;
+
+        const totalEffectiveSeconds = effectiveSecondsPerDay + secondsWorked;
+
+        const result = secondsToTime(totalEffectiveSeconds);
+
+        document.getElementById("total-hours").textContent = result;
+      }
+    </script>
+  </body>
+</html>
