@@ -56,7 +56,7 @@
         cursor: pointer;
       }
 
-      label{
+      label {
         margin-bottom: 10px;
       }
 
@@ -73,14 +73,29 @@
         color: green;
         font-weight: bold;
       }
+      #remaining-hours {
+        font-size: larger;
+        color: rgb(255, 0, 0);
+        font-weight: bold;
+      }
+      #punchout {
+        font-size: larger;
+        color: rgb(255, 94, 0);
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
     <div class="container">
+      <p style="text-align: right; margin-bottom: 20px">
+        Remaing time: <span id="remaining-hours">00 hours, 00 minutes</span>
+      </p>
       <h1>Calculate Total Working Time</h1>
       <label for="effective-hours">Effective Hours Worked Per Day:</label>
-      <b>Hours</b><select id="hours"></select>
-      <b>Minutes</b><select id="minutes"></select>
+      <b>Hours</b
+      ><select id="hours"></select>
+      <b>Minutes</b
+      ><select id="minutes"></select>
 
       <label for="last-login">Last Login Time:</label>
       <input type="time" id="last-login" />
@@ -88,7 +103,13 @@
       <button onclick="calculateTotalTime()">Calculate Total Time</button>
 
       <div id="result">
-        <p>Total Effective Hours Worked: <span id="total-hours">00 hours, 00 minutes</span></p>
+        <p>
+          Total Effective Hours Worked:
+          <span id="total-hours">00 hours, 00 minutes</span>
+        </p>
+        <p style="margin-top: 10px">
+          Punchout time: <span id="punchout">00:00 am</span>
+        </p>
       </div>
     </div>
 
@@ -155,14 +176,19 @@
         // const result = secondsToTime(secondsWorked);
         // alert(result);
 
-        const effectiveSecondsPerDay =
-          effectiveHours * 3600 + effectiveMinutes * 60;
-
+        const effectiveSecondsPerDay =(effectiveHours * 3600) + (effectiveMinutes * 60);
         const totalEffectiveSeconds = effectiveSecondsPerDay + secondsWorked;
 
-        const result = secondsToTime(totalEffectiveSeconds);
+        const remaing = 28800 - totalEffectiveSeconds;
 
+        const result = secondsToTime(totalEffectiveSeconds+60);
         document.getElementById("total-hours").textContent = result;
+
+        const resultRemaining = secondsToTime(remaing);
+        document.getElementById("remaining-hours").textContent = resultRemaining;
+
+        var newDateObj = new Date(currentTime.getTime() +(remaing*1000)).toLocaleDateString('en-GB', {hour12: 'true', hour: '2-digit',minute: '2-digit'});
+        document.getElementById("punchout").textContent = newDateObj;
       }
     </script>
   </body>
