@@ -212,13 +212,10 @@
 
         const timeDifference = currentTime - lastLoginTime; // in milliseconds
         const secondsWorked = Math.floor(timeDifference / 1000); // convert to seconds
-
         const effectiveSecondsPerDay =
           effectiveHours * 3600 + effectiveMinutes * 60;
         const totalEffectiveSeconds = effectiveSecondsPerDay + secondsWorked;
-
         const remaing = 28800 - totalEffectiveSeconds;
-
         const result = secondsToTime(totalEffectiveSeconds);
         const totalEffectivehours = Math.floor(totalEffectiveSeconds / 3600);
         // if (totalEffectivehours >= 8) {
